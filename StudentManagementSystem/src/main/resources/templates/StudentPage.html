@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Students</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+</head>
+<body>
+<nav class="navbar navbar-expand-md bg-dark navbar-dark">
+    <!-- Brand -->
+    <a class="navbar-brand" href="#">Student Management System</a>
+
+    <!-- Toggler/collapsibe Button -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navbar links -->
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/}">Student Management</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="container my-2">
+    <div class="row">
+        <h1>List Students</h1>
+    </div>
+    <div class="row">
+        <div class="col-lg-3">
+            <a th:href="@{/student/redirect}" class="btn btn-primary btn-sm-mb-3">Add Students</a>
+        </div>
+        <br>
+        <br>
+    </div>
+
+        <table class="table table-dark">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Address</th>
+                    <th scope="col">Action</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="student_list : ${list_}">
+                    <td th th:text="${student_list.id}"></td>
+                    <td th th:text="${student_list.firstName}"></td>
+                    <td th th:text="${student_list.lastName}"></td>
+                    <td th th:text="${student_list.email}"></td>
+                    <td th th:text="${student_list.address}"></td>
+                    <td>
+                        <a th:href="@{/student/edit/{id}(id=${student_list.id})}"
+                           class="btn btn-primary">Update</a>
+                        <a th:href="@{/student/{id}(id=${student_list.id})}"
+                           class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div th:if="${totalPages > 1}">
+            <div class="row col-sm-10">
+                <div class="col-sm-2">
+                    Total Rows: [[${totalItems}]]
+                </div>
+                <div class="col-sm-1">
+                    <span th:each="i: ${#numbers.sequence(1,totalPages)}">
+                        <a th:if="${currentPage !=i}" th:href="@{'/page/' + ${i}}">[[${i}]]</a>
+                        <span th:unless="${currentPage !=i}">[[${i}]]</span>
+                    </span>
+                </div>
+                <div class="col-sm-1">
+                    <a th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${currentPage + 1}}">Next</a>
+                    <span th:unless="${currentPage < totalPages}">Next</span>
+                </div>
+                <div class="col-sm-1">
+                    <a th:if="${currentPage <= totalPages}" th:href="@{'/page/' + ${currentPage - 1}}">Previous</a>
+                    <span th:unless="${currentPage <= totalPages}">Last</span>
+                </div>
+            </div>
+        </div>
+</div>
+</body>
+</html>
